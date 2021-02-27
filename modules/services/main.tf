@@ -74,3 +74,16 @@ resource "cloudflare_page_rule" "lets_encrypt" {
     automatic_https_rewrites = "off"
   }
 }
+
+#Create a page rule to redirect root domain to www subdomain.
+resource "cloudflare_page_rule" "root_domain_redirect" {
+  zone_id = var.cf_zone_id
+  target = "${var.cf_zone}/*"
+  priority = 3
+  actions {
+    forwarding_url {
+      url = "https://${var.subdomain}.${var.cf_zone}"
+      status_code = 301
+    }
+  }
+}
