@@ -22,6 +22,16 @@ resource "cloudflare_record" "www" {
   proxied = true
 }
 
+#Create a DNS record for the root domain.
+resource "cloudflare_record" "root" {
+  zone_id = var.cf_zone_id
+  name    = "@"
+  value   = "${var.subdomain}.${var.cf_zone}"
+  type    = "CNAME"
+  ttl     = 1
+  proxied = true
+}
+
 #Filter for firewall rule to whitelist your public IP for the admin portal.
 resource "cloudflare_filter" "ghost_allow_filter" {
   zone_id = var.cf_zone_id
